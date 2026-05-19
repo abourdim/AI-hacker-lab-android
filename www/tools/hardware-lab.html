@@ -102,6 +102,15 @@ pre .str{color:var(--neon)}
 <h1>🔧 Hardware Lab</h1>
 <p class="sub">micro:bit &amp; ESP32-C3 projects with AI integration</p>
 
+<div id="_hwAndroidBanner" style="display:none;background:var(--ad);border:1px solid var(--amber);border-radius:10px;padding:14px 16px;margin:8px 0 18px;color:var(--txt)">
+  <div style="font-weight:700;color:var(--amber);font-size:.95rem;margin-bottom:6px" id="_hwBanT">🖥 Desktop browser required</div>
+  <div style="font-size:.86rem;line-height:1.55;color:var(--txt2)" id="_hwBanB">
+    <span data-banlang="en">This workshop needs the <strong>Web Serial API</strong> to talk to micro:bit / ESP32 boards. Android WebView doesn't support it. Open this page in <strong>Chrome or Edge on a desktop / laptop</strong> to actually run the projects. You can still scroll and read about them here — and the other workshops in the lab work fine on Android.</span>
+    <span data-banlang="fr" style="display:none">Cet atelier a besoin de la <strong>Web Serial API</strong> pour parler aux cartes micro:bit / ESP32. Android WebView ne la prend pas en charge. Ouvre cette page dans <strong>Chrome ou Edge sur un ordinateur</strong> pour lancer les projets. Tu peux quand même lire ici — et les autres ateliers du labo fonctionnent sur Android.</span>
+    <span data-banlang="ar" style="display:none;direction:rtl;text-align:right">يحتاج هذا الورشة إلى <strong>Web Serial API</strong> للتواصل مع لوحات micro:bit / ESP32. متصفّح أندرويد لا يدعم ذلك. افتح هذه الصفحة في <strong>Chrome أو Edge على حاسوب</strong> لتشغيل المشاريع. يمكنك القراءة هنا — وبقية ورش المختبر تعمل على أندرويد.</span>
+  </div>
+</div>
+
 <div class="tabs">
 <div class="tab on" onclick="showP(0)">🎮 Gesture <span class="t-badge" style="color:var(--neon);border-color:var(--neon)">micro:bit</span></div>
 <div class="tab" onclick="showP(1)">🌡️ Sensors <span class="t-badge" style="color:var(--neon);border-color:var(--neon)">micro:bit</span></div>
@@ -313,6 +322,28 @@ function _cycleLang() {
     const s = localStorage.getItem('aih-lang');
     if (s && _i18n[s]) { _lang = s; _cycleLang(); }
   } catch(e) {}
+})();
+
+/* Show Web Serial warning banner only when running inside Capacitor (Android wrapper)
+   AND the Web Serial API is missing. Desktop Chrome/Edge users never see it. */
+(function() {
+  try {
+    const isCap = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+    const noSerial = !('serial' in navigator);
+    if (isCap && noSerial) {
+      const b = document.getElementById('_hwAndroidBanner');
+      if (b) b.style.display = 'block';
+    }
+  } catch(e) {}
+  // Reflect current language in the banner copy
+  function _syncBanLang() {
+    document.querySelectorAll('#_hwAndroidBanner [data-banlang]').forEach(el => {
+      el.style.display = (el.dataset.banlang === _lang) ? '' : 'none';
+    });
+  }
+  _syncBanLang();
+  const _orig = _cycleLang;
+  window._cycleLang = function() { _orig.apply(this, arguments); _syncBanLang(); };
 })();
 </script>
 
