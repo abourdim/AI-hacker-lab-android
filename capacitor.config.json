@@ -1,0 +1,22 @@
+{
+  "appId": "org.workshopdiy.aihackerlab",
+  "appName": "AI Hacker Lab",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#39FF85",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#39FF85"
+    }
+  }
+}
